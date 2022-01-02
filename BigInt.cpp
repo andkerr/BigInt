@@ -3,7 +3,7 @@
 
 BigInt::BigInt(const std::string &val) {
     for (auto it = val.rbegin(); it != val.rend(); ++it) {
-        digits.push_back(*it);
+        digits.push_back(*it - '0');
     }
 }
 

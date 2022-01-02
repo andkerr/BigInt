@@ -20,7 +20,7 @@ class BigInt {
         // performance when adding more digits with a call to
         // push_back(). I'm not sure if there is a better way to
         // do this, but have considered storing digits in a deque.
-        std::vector<char> digits;
+        std::vector<int> digits;
 
     void carry(const int index);
 
