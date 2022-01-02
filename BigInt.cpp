@@ -27,9 +27,9 @@ void BigInt::carry(const int index) {
     }
 }
 
-void BigInt::operator+=(const BigInt &rhs) {
+BigInt& BigInt::operator+=(const BigInt &rhs) {
     // define in terms of the overloaded addition operator
-    *this = *this + rhs;
+    return *this = *this + rhs;
 }
 
 BigInt BigInt::operator+(const BigInt &rhs) {

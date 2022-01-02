@@ -16,7 +16,7 @@ class BigInt {
         BigInt(const std::string &val);
 
         // arithmetic-assignment operators
-        void operator+=(const BigInt &rhs);
+        BigInt& operator+=(const BigInt &rhs);
 
         // arithmetic operators
         BigInt operator+(const BigInt &rhs);
