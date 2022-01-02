@@ -4,11 +4,14 @@
 using namespace std;
 
 int main() {
+    BigInt def;
+
     BigInt my_int("999");
     BigInt my_int2("999");
 
     BigInt sum = my_int + my_int2;
 
+    cout << def << endl;
     cout << my_int << endl;
     cout << my_int2 << endl;
     cout << sum << endl;

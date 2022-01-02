@@ -1,6 +1,9 @@
 #include <cassert>
 #include "BigInt.h"
 
+BigInt::BigInt()
+    : digits({0}), negative(false) { }
+
 BigInt::BigInt(const std::string &val) {
     for (auto it = val.rbegin(); it != val.rend(); ++it) {
         digits.push_back(*it - '0');
@@ -22,6 +25,11 @@ void BigInt::carry(const int index) {
             carry(index+1);
         }
     }
+}
+
+void BigInt::operator+=(const BigInt &rhs) {
+    // define in terms of the overloaded addition operator
+    *this = *this + rhs;
 }
 
 BigInt BigInt::operator+(const BigInt &rhs) {
