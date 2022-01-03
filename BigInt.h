@@ -49,4 +49,4 @@ class BigInt {
 
 };
 
-#endif
+#endif // BIGINT_H
