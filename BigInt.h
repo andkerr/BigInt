@@ -12,8 +12,9 @@
 
 class BigInt {
     public:
-        BigInt();
-        BigInt(const std::string &val);
+        BigInt(); // default ctor
+        BigInt(const std::string &val); // ctor
+        BigInt& operator=(const std::string &val); // assignment from string
 
         bool is_negative() const;
 
@@ -22,13 +23,18 @@ class BigInt {
         BigInt& operator-=(const BigInt &rhs);
 
         // arithmetic operators
-        BigInt operator+(const BigInt &rhs);
-        BigInt operator-(const BigInt &rhs);
+        BigInt operator+(const BigInt &rhs) const;
+        BigInt operator-(const BigInt &rhs) const;
 
         // unary operators
         BigInt operator+();
         BigInt operator-();
+        BigInt& operator++();
+        BigInt& operator--();
+        BigInt operator++(int);
+        BigInt operator--(int);
 
+        std::string to_string() const;
         friend std::ostream& operator<<(std::ostream &os,
                                         const BigInt &val);
 

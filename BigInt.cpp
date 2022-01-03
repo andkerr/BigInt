@@ -34,6 +34,18 @@ BigInt::BigInt(const std::string &val) {
     }
 }
 
+// assign to a BigInt from a string representation of an integer
+//
+// * is this a good idea? I am implementing this with convenience
+// in mind, for example, to reassign to a previously-created BigInt a:
+// a = "12345"; (instead of/in addition to)
+// a = BigInt("12345");
+//
+// Is this confusing more than it is helpful?
+BigInt& BigInt::operator=(const std::string &val) {
+    return *this = BigInt(val);
+}
+
 bool BigInt::is_negative() const {
     return negative;
 }
@@ -60,7 +72,7 @@ BigInt& BigInt::operator+=(const BigInt &rhs) {
     return *this = *this + rhs;
 }
 
-BigInt BigInt::operator+(const BigInt &rhs) {
+BigInt BigInt::operator+(const BigInt &rhs) const {
     BigInt result = *this;
 
     for (size_t i = 0; i < rhs.digits.size(); ++i) {
@@ -81,7 +93,7 @@ BigInt BigInt::operator+(const BigInt &rhs) {
     return result;
 }
 
-BigInt BigInt::operator-(const BigInt &rhs) {
+BigInt BigInt::operator-(const BigInt &rhs) const {
     assert(false);
 }
 
@@ -92,6 +104,20 @@ BigInt BigInt::operator+() {
 BigInt BigInt::operator-() {
     negative = negative ? false : true;
     return *this;
+}
+
+std::string BigInt::to_string() const {
+    std::string s_out;
+
+    if (is_negative()) {
+        s_out.push_back('-');
+    }
+
+    for (auto it = digits.rbegin(); it != digits.rend(); ++it) {
+        s_out.push_back(*it + '0');
+    }
+
+    return s_out;
 }
 
 std::ostream& operator<<(std::ostream &os, const BigInt &val)
