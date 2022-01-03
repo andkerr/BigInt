@@ -1,5 +1,5 @@
 #ifndef BIGINT_H
-#define BIGINT
+#define BIGINT_H
 
 // A class to represent arbitrary-precision integers.
 // by Andrew Kerr <kerrand@protonmail.com>, January 2022
@@ -15,11 +15,19 @@ class BigInt {
         BigInt();
         BigInt(const std::string &val);
 
+        bool is_negative() const;
+
         // arithmetic-assignment operators
         BigInt& operator+=(const BigInt &rhs);
+        BigInt& operator-=(const BigInt &rhs);
 
         // arithmetic operators
         BigInt operator+(const BigInt &rhs);
+        BigInt operator-(const BigInt &rhs);
+
+        // unary operators
+        BigInt operator+();
+        BigInt operator-();
 
         friend std::ostream& operator<<(std::ostream &os,
                                         const BigInt &val);

@@ -1,13 +1,18 @@
 #include "BigInt.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 int main() {
-    BigInt a("3");
-    BigInt b;
+    string val = "125432";
+    BigInt a(val);
 
-    b = a += BigInt("2");
+    a = -a;
 
-    cout << a << " " << b << endl;
+    if (a.is_negative()) {
+        cout << "a is negative" << endl;
+    }
+
+    cout << a << endl;
 }
