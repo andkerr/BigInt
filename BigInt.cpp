@@ -82,16 +82,16 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
         if (i < rhs.digits.size() && i < result.digits.size()) {
             int partial_sum = result.digits[i] + rhs.digits[i] + carry;
             result.digits[i] = partial_sum % 10;
-            carry = partial_sum >= 10;
+            carry = int(partial_sum / 10);
         }
         else if (i < rhs.digits.size()) {
             int partial_sum = rhs.digits[i] + carry;
             result.digits.push_back(partial_sum % 10);
-            carry = partial_sum >= 10;
+            carry = int(partial_sum / 10);
         }
-        else {
-            result.digits.push_back(carry);
-            break;
+        else { // i < results.digits.size()
+            result.digits[i] += carry;
+            carry = int(result.digits[i] / 10);
         }
 
         ++i;
