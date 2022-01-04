@@ -24,4 +24,11 @@ TEST(test_assignment_from_string) {
     ASSERT_TRUE(a.is_negative());
 }
 
+TEST(test_addition_no_carry) {
+    BigInt a("111");
+    BigInt b("222");
+    BigInt c = a + b;
+    ASSERT_EQUAL(c.to_string(), "333");
+}
+
 TEST_MAIN()

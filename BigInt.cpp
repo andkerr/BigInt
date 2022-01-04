@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <exception>
 #include "BigInt.h"
@@ -75,19 +76,25 @@ BigInt& BigInt::operator+=(const BigInt &rhs) {
 BigInt BigInt::operator+(const BigInt &rhs) const {
     BigInt result = *this;
 
-    for (size_t i = 0; i < rhs.digits.size(); ++i) {
-        int digit = rhs.digits[i];
-
-        assert(i <= result.digits.size());
-        if (i == result.digits.size()) {
-            result.digits.push_back(digit);
+    int i = 0;
+    int carry = 0;
+    while (i < rhs.digits.size() || i < result.digits.size()) {
+        if (i < rhs.digits.size() && i < result.digits.size()) {
+            int partial_sum = result.digits[i] + rhs.digits[i] + carry;
+            result.digits[i] = partial_sum % 10;
+            carry = partial_sum >= 10;
+        }
+        else if (i < rhs.digits.size()) {
+            int partial_sum = rhs.digits[i] + carry;
+            result.digits.push_back(partial_sum % 10);
+            carry = partial_sum >= 10;
         }
         else {
-            result.digits[i] += digit;
-            if (result.digits[i] > 9) {
-                result.carry(i);
-            }
+            result.digits.push_back(carry);
+            break;
         }
+
+        ++i;
     }
 
     return result;
