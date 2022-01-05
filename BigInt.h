@@ -50,9 +50,6 @@ class BigInt {
         std::vector<int> digits;
 
         bool negative;
-
-        void carry(const int index);
-
 };
 
 #endif // BIGINT_H

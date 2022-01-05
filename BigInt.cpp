@@ -3,6 +3,35 @@
 #include <exception>
 #include "BigInt.h"
 
+// base routine for adding two nonnegative integers
+static void add(const std::vector<int> &lhs,
+                const std::vector<int> &rhs,
+                std::vector<int> &result, const int base) {
+    int i = 0;
+    int carry = 0;
+    while (i < lhs.size() || i < rhs.size()) {
+        if (i < lhs.size() && i < rhs.size()) {
+            int partial_sum = lhs[i] + rhs[i] + carry;
+            result[i] = partial_sum % base;
+            carry = int(partial_sum / base);
+        }
+        else if (i < rhs.size()) {
+            int partial_sum = rhs[i] + carry;
+            result.push_back(partial_sum % base);
+            carry = int(partial_sum / base);
+        }
+        else { // i < lhs.size()
+            int partial_sum = lhs[i] + carry;
+            result[i] = partial_sum % base;
+            carry = int(partial_sum / base);
+        }
+        ++i;
+    }
+    if (carry) {
+        result.push_back(carry);
+    }
+}
+
 BigInt::BigInt()
     : digits({0}), negative(false) { }
 
@@ -59,29 +88,11 @@ BigInt& BigInt::operator+=(const BigInt &rhs) {
 BigInt BigInt::operator+(const BigInt &rhs) const {
     BigInt result = *this;
 
-    int i = 0;
-    int carry = 0;
-    while (i < rhs.digits.size() || i < digits.size()) {
-        if (i < rhs.digits.size() && i < digits.size()) {
-            int partial_sum = digits[i] + rhs.digits[i] + carry;
-            result.digits[i] = partial_sum % BASE;
-            carry = int(partial_sum / BASE);
-        }
-        else if (i < rhs.digits.size()) {
-            int partial_sum = rhs.digits[i] + carry;
-            result.digits.push_back(partial_sum % BASE);
-            carry = int(partial_sum / BASE);
-        }
-        else { // i < digits.size()
-            int partial_sum = digits[i] + carry;
-            result.digits[i] = partial_sum % BASE;
-            carry = int(partial_sum / BASE);
-        }
-
-        ++i;
+    if (!(this->is_negative() || rhs.is_negative())) {
+        add(this->digits, rhs.digits, result.digits, BASE);
     }
-    if (carry) {
-        result.digits.push_back(carry);
+    else {
+        assert(false); // addition with negative BigInts not yet implemented
     }
 
     return result;
