@@ -5,10 +5,9 @@
 using namespace std;
 
 int main() {
-    string val = "125432";
-    BigInt a(val);
+    BigInt a("111");
 
-    a = -a;
+    a += BigInt("999");
 
     if (a.is_negative()) {
         cout << "a is negative" << endl;

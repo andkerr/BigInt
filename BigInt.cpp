@@ -78,9 +78,9 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
 
     int i = 0;
     int carry = 0;
-    while (i < rhs.digits.size() || i < result.digits.size()) {
-        if (i < rhs.digits.size() && i < result.digits.size()) {
-            int partial_sum = result.digits[i] + rhs.digits[i] + carry;
+    while (i < rhs.digits.size() || i < digits.size()) {
+        if (i < rhs.digits.size() && i < digits.size()) {
+            int partial_sum = digits[i] + rhs.digits[i] + carry;
             result.digits[i] = partial_sum % 10;
             carry = int(partial_sum / 10);
         }
@@ -89,12 +89,16 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
             result.digits.push_back(partial_sum % 10);
             carry = int(partial_sum / 10);
         }
-        else { // i < results.digits.size()
-            result.digits[i] += carry;
-            carry = int(result.digits[i] / 10);
+        else { // i < digits.size()
+            int partial_sum = digits[i] + carry;
+            result.digits[i] = partial_sum % 10;
+            carry = int(partial_sum / 10);
         }
 
         ++i;
+    }
+    if (carry) {
+        result.digits.push_back(carry);
     }
 
     return result;
