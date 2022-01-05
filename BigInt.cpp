@@ -27,7 +27,7 @@ BigInt::BigInt(const std::string &val) {
             continue;
         }
 
-        if (*it < '0' || *it > '9') {
+        if (*it < '0' || *it - '0' >= BASE) {
             throw std::invalid_argument("Bad initializer digit.");
         }
 
@@ -51,23 +51,6 @@ bool BigInt::is_negative() const {
     return negative;
 }
 
-void BigInt::carry(const int index) {
-    assert(digits[index] > 9 && digits[index] < 20);
-
-    if (index == int(digits.size()) - 1) {
-        digits.push_back(1);
-        digits[index] %= 10;
-    }
-    else {
-        digits[index + 1] += 1;
-        digits[index] %= 10;
-
-        if (digits[index + 1] > 9) {
-            carry(index+1);
-        }
-    }
-}
-
 BigInt& BigInt::operator+=(const BigInt &rhs) {
     // define in terms of the overloaded addition operator
     return *this = *this + rhs;
@@ -81,18 +64,18 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
     while (i < rhs.digits.size() || i < digits.size()) {
         if (i < rhs.digits.size() && i < digits.size()) {
             int partial_sum = digits[i] + rhs.digits[i] + carry;
-            result.digits[i] = partial_sum % 10;
-            carry = int(partial_sum / 10);
+            result.digits[i] = partial_sum % BASE;
+            carry = int(partial_sum / BASE);
         }
         else if (i < rhs.digits.size()) {
             int partial_sum = rhs.digits[i] + carry;
-            result.digits.push_back(partial_sum % 10);
-            carry = int(partial_sum / 10);
+            result.digits.push_back(partial_sum % BASE);
+            carry = int(partial_sum / BASE);
         }
         else { // i < digits.size()
             int partial_sum = digits[i] + carry;
-            result.digits[i] = partial_sum % 10;
-            carry = int(partial_sum / 10);
+            result.digits[i] = partial_sum % BASE;
+            carry = int(partial_sum / BASE);
         }
 
         ++i;

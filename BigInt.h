@@ -4,14 +4,14 @@
 // A class to represent arbitrary-precision integers.
 // by Andrew Kerr <kerrand@protonmail.com>, January 2022
 
-
 #include <iostream>
 #include <vector>
 #include <string>
 
-
 class BigInt {
     public:
+        static const int BASE = 10;
+
         BigInt(); // default ctor
         BigInt(const std::string &val); // ctor
         BigInt& operator=(const std::string &val); // assignment from string
