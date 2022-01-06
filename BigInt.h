@@ -25,6 +25,8 @@ class BigInt {
         // arithmetic operators
         BigInt operator+(const BigInt &rhs) const;
         BigInt operator-(const BigInt &rhs) const;
+        BigInt operator*(const BigInt &rhs) const;
+        BigInt operator/(const BigInt &rhs) const;
 
         // unary operators
         BigInt operator+();
@@ -33,6 +35,15 @@ class BigInt {
         BigInt& operator--();
         BigInt operator++(int);
         BigInt operator--(int);
+
+        // comparison operators
+        // https://stackoverflow.com/questions/4421706 for reference
+        bool operator==(const BigInt &rhs) const;
+        bool operator!=(const BigInt &rhs) const;
+        bool operator< (const BigInt &rhs) const;
+        bool operator> (const BigInt &rhs) const;
+        bool operator<=(const BigInt &rhs) const;
+        bool operator>=(const BigInt &rhs) const;
 
         std::string to_string() const;
         friend std::ostream& operator<<(std::ostream &os,
