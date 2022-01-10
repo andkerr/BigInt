@@ -36,7 +36,27 @@ static void add(const std::vector<int> &lhs,
 static void subtract(const std::vector<int> &lhs,
                      const std::vector<int> &rhs,
                      std::vector<int> &result, const int base) {
-    assert(false);
+    int i = 0;
+    int borrow = 0;
+    while (i < lhs.size() || i < rhs.size()) {
+        if (i < lhs.size() && i < rhs.size()) {
+            int partial_sum = lhs[i] - rhs[i] + borrow;
+            result[i] = partial_sum % base;
+            borrow = int(partial_sum / base) - 1;
+        }
+        else if (i < rhs.size()) {
+            int partial_sum = -rhs[i] + borrow;
+            result.push_back(partial_sum % base);
+            borrow = int(partial_sum / base) - 1;
+        }
+        else { // i < lhs.size()
+            int partial_sum = lhs[i] + borrow;
+            result[i] = partial_sum % base;
+            borrow = int(partial_sum / base) - 1;
+        }
+        ++i;
+    }
+    assert(borrow == 0);
 }
 
 // base routine for mutliplying two nonegative integers
@@ -99,6 +119,11 @@ BigInt& BigInt::operator+=(const BigInt &rhs) {
     return *this = *this + rhs;
 }
 
+BigInt& BigInt::operator-=(const BigInt &rhs) {
+    // define in terms of the overloaded subtraction operator
+    return *this = *this - rhs;
+}
+
 BigInt BigInt::operator+(const BigInt &rhs) const {
     BigInt result = *this;
 
@@ -114,15 +139,17 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
 
 BigInt BigInt::operator-(const BigInt &rhs) const {
     BigInt result = *this;
-
     if(!(this->is_negative() || rhs.is_negative())) {
-        if (*this >= rhs) {
+        // if (*this >= rhs) {
             subtract(this->digits, rhs.digits, result.digits, BASE);
-        }
-        else {
-            subtract(rhs.digits, this->digits, result.digits, BASE);
-            result.negative = true;
-        }
+        // }
+        // else {
+        //     subtract(rhs.digits, this->digits, result.digits, BASE);
+        //     result.negative = true;
+        // }
+    }
+    else {
+        assert(false); // subtraction with negative BigInts not implemented
     }
     return result;
 }

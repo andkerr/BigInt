@@ -5,13 +5,14 @@
 using namespace std;
 
 int main() {
-    BigInt a("111");
+    BigInt a("1001");
+    BigInt b("2");
 
-    a += BigInt("999");
-
-    if (a.is_negative()) {
-        cout << "a is negative" << endl;
+    if (a.is_negative() || b.is_negative()) {
+        cout << "one of a or b is negative" << endl;
     }
+
+    a -= b;
 
     cout << a << endl;
 }
