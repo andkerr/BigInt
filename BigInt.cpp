@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <exception>
 #include "BigInt.h"
 
@@ -42,17 +43,16 @@ static void subtract(const std::vector<int> &lhs,
         if (i < lhs.size() && i < rhs.size()) {
             int partial_sum = lhs[i] - rhs[i] + borrow;
             result[i] = partial_sum % base;
-            borrow = int(partial_sum / base) - 1;
+            borrow = int(std::floor(partial_sum / base));
         }
         else if (i < rhs.size()) {
             int partial_sum = -rhs[i] + borrow;
-            result.push_back(partial_sum % base);
-            borrow = int(partial_sum / base) - 1;
+            borrow = int(std::floor(partial_sum / base));
         }
         else { // i < lhs.size()
             int partial_sum = lhs[i] + borrow;
             result[i] = partial_sum % base;
-            borrow = int(partial_sum / base) - 1;
+            borrow = int(std::floor(partial_sum / base));
         }
         ++i;
     }

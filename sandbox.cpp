@@ -1,4 +1,5 @@
 #include "BigInt.h"
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -15,4 +16,5 @@ int main() {
     a -= b;
 
     cout << a << endl;
+    cout << floor(-1.3) << endl;
 }
