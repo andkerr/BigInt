@@ -42,7 +42,7 @@ static void subtract(const std::vector<int> &lhs,
     while (i < lhs.size() || i < rhs.size()) {
         if (i < lhs.size() && i < rhs.size()) {
             int partial_sum = lhs[i] - rhs[i] + borrow;
-            result[i] = partial_sum % base;
+            result[i] = partial_sum - base * std::floor(partial_sum / base);
             borrow = int(std::floor(partial_sum / base));
         }
         else if (i < rhs.size()) {
@@ -51,7 +51,8 @@ static void subtract(const std::vector<int> &lhs,
         }
         else { // i < lhs.size()
             int partial_sum = lhs[i] + borrow;
-            result[i] = partial_sum % base;
+            // result[i] = std::abs(partial_sum % base);
+            result[i] = partial_sum - base * std::floor(partial_sum / base);
             borrow = int(std::floor(partial_sum / base));
         }
         ++i;
