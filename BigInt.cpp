@@ -4,6 +4,8 @@
 #include <exception>
 #include "BigInt.h"
 
+// vvvvvvvvvv HELPER FUNCTIONS vvvvvvvvvv
+
 // remove leading zeros
 static void rem_lzeros(std::vector<int>& a) {
     while (a.size() > 1 && a.back() == 0) {
@@ -80,6 +82,10 @@ static void multiply(const std::vector<int> &lhs,
     assert(false);
 }
 
+// ^^^^^^^^^^ HELPER FUNCTIONS ^^^^^^^^^^
+//
+// vvvvvvvvvv CONSTRUCTORS vvvvvvvvvv
+
 BigInt::BigInt()
     : digits({0}), negative(false) { }
 
@@ -130,9 +136,13 @@ BigInt& BigInt::operator=(const std::string &val) {
     return *this = BigInt(val);
 }
 
+// ^^^^^^^^^^ CONSTRUCTORS ^^^^^^^^^^
+
 bool BigInt::is_negative() const {
     return negative;
 }
+
+// vvvvvvvvvv ARITHMETIC-ASSIGNMENT OPERATORS vvvvvvvvvv
 
 BigInt& BigInt::operator+=(const BigInt &rhs) {
     // define in terms of the overloaded addition operator
@@ -144,6 +154,10 @@ BigInt& BigInt::operator-=(const BigInt &rhs) {
     return *this = *this - rhs;
 }
 
+// ^^^^^^^^^^ ARITHMETIC-ASSIGNMENT OPERATORS ^^^^^^^^^^
+//
+// vvvvvvvvvv ARITHMETIC OPERAORS vvvvvvvvvv
+
 BigInt BigInt::operator+(const BigInt &rhs) const {
     BigInt result;
     std::vector<int> result_digs;
@@ -151,10 +165,19 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
     if (!(this->is_negative() || rhs.is_negative())) {
         add(this->digits, rhs.digits, result_digs, BASE);
         result = {result_digs, false};
-    
+
+    }
+    else if (this->is_negative() && rhs.is_negative()) {
+        add(this->digits, rhs.digits, result_digs, BASE);
+        result = {result_digs, true};
     }
     else {
-        assert(false); // addition with negative BigInts not yet implemented
+        if (this->is_negative()) {
+            result = rhs - (-(*this));
+        }
+        else {
+            result = *this - (-(rhs));
+        }
     }
 
     return result;
@@ -190,15 +213,37 @@ BigInt BigInt::operator/(const BigInt &rhs) const {
     assert(false);
 }
 
-BigInt BigInt::operator+() {
-    return *this;
+// ^^^^^^^^^^ ARITHMETIC OPERATORS ^^^^^^^^^^
+//
+// vvvvvvvvvv UNARY OPERATORS vvvvvvvvvv
+
+BigInt BigInt::operator+() const {
+    return BigInt(this->digits, this->negative);
 }
 
-BigInt BigInt::operator-() {
-    negative = negative ? false : true;
-    return *this;
+BigInt BigInt::operator-() const {
+    bool negative_in = negative ? false : true;
+    return BigInt(this->digits, negative_in);
 }
 
+BigInt& BigInt::operator++() {
+    assert(false);
+}
+
+BigInt& BigInt::operator--() {
+    assert(false);
+}
+
+BigInt BigInt::operator++(int) {
+    assert(false);
+}
+
+BigInt BigInt::operator--(int) {
+    assert(false);
+}
+
+// ^^^^^^^^^^ UNARY OPERATORS ^^^^^^^^^^
+//
 // vvvvvvvvv COMPARISON OPERATORS vvvvvvvvv
 
 bool BigInt::operator==(const BigInt &rhs) const {
@@ -251,6 +296,8 @@ bool BigInt::operator<=(const BigInt &rhs) const {
 bool BigInt::operator>=(const BigInt &rhs) const {
     return !(*this < rhs);
 }
+
+// ^^^^^^^^^^ COMPARISON OPERATORS ^^^^^^^^^^
 
 std::string BigInt::to_string() const {
     std::string s_out;

@@ -29,8 +29,8 @@ class BigInt {
         BigInt operator/(const BigInt &rhs) const;
 
         // unary operators
-        BigInt operator+();
-        BigInt operator-();
+        BigInt operator+() const;
+        BigInt operator-() const;
         BigInt& operator++();
         BigInt& operator--();
         BigInt operator++(int);
