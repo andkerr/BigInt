@@ -25,7 +25,7 @@ static void add(const std::vector<int> &lhs,
     while (i < lhs.size() || i < rhs.size()) {
         if (i < lhs.size() && i < rhs.size()) {
             int partial_sum = lhs[i] + rhs[i] + carry;
-            result[i] = partial_sum % base;
+            result.push_back(partial_sum % base);
             carry = int(partial_sum / base);
         }
         else if (i < rhs.size()) {
@@ -35,7 +35,7 @@ static void add(const std::vector<int> &lhs,
         }
         else { // i < lhs.size()
             int partial_sum = lhs[i] + carry;
-            result[i] = partial_sum % base;
+            result.push_back(partial_sum % base);
             carry = int(partial_sum / base);
         }
         ++i;
@@ -54,16 +54,17 @@ static void subtract(const std::vector<int> &lhs,
     while (i < lhs.size() || i < rhs.size()) {
         if (i < lhs.size() && i < rhs.size()) {
             int partial_sub = lhs[i] - rhs[i] + borrow;
-            result[i] = mod(partial_sub, base);
+            result.push_back(mod(partial_sub, base));
             borrow = int(std::floor(float(partial_sub) / base));
         }
         else if (i < rhs.size()) {
             int partial_sub = -rhs[i] + borrow;
+            result.push_back(mod(partial_sub, base));
             borrow = int(std::floor(float(partial_sub) / base));
         }
         else { // i < lhs.size()
             int partial_sub = lhs[i] + borrow;
-            result[i] = mod(partial_sub, base);
+            result.push_back(mod(partial_sub, base));
             borrow = int(std::floor(float(partial_sub) / base));
         }
         ++i;
@@ -97,6 +98,9 @@ BigInt::BigInt(const std::string &val) {
         }
         negative = true;
     }
+    else {
+        negative = false;
+    }
 
     for (auto it = val.rbegin(); it != val.rend(); ++it) {
         if (*it == '-' && next(it) == val.rend()) {
@@ -110,6 +114,9 @@ BigInt::BigInt(const std::string &val) {
         digits.push_back(*it - '0');
     }
 }
+
+BigInt::BigInt(const std::vector<int>& digits_in, const bool negative_in)
+    : digits(digits_in), negative(negative_in) { };
 
 // assign to a BigInt from a string representation of an integer
 //
@@ -138,10 +145,13 @@ BigInt& BigInt::operator-=(const BigInt &rhs) {
 }
 
 BigInt BigInt::operator+(const BigInt &rhs) const {
-    BigInt result = *this;
+    BigInt result;
+    std::vector<int> result_digs;
 
     if (!(this->is_negative() || rhs.is_negative())) {
-        add(this->digits, rhs.digits, result.digits, BASE);
+        add(this->digits, rhs.digits, result_digs, BASE);
+        result = {result_digs, false};
+    
     }
     else {
         assert(false); // addition with negative BigInts not yet implemented
@@ -151,14 +161,16 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
 }
 
 BigInt BigInt::operator-(const BigInt &rhs) const {
-    BigInt result = *this;
+    BigInt result;
+    std::vector<int> result_digs;
     if(!(this->is_negative() || rhs.is_negative())) {
         if (*this >= rhs) {
-            subtract(this->digits, rhs.digits, result.digits, BASE);
+            subtract(this->digits, rhs.digits, result_digs, BASE);
+            result = {result_digs, false};
         }
         else {
-            subtract(rhs.digits, this->digits, result.digits, BASE);
-            result.negative = true;
+            subtract(rhs.digits, this->digits, result_digs, BASE);
+            result = {result_digs, true};
         }
     }
     else {

@@ -60,6 +60,8 @@ class BigInt {
         // do this, but have considered storing digits in a deque.
         std::vector<int> digits;
 
+        BigInt(const std::vector<int>& digits_in, const bool negative_in);
+
         bool negative;
 };
 
