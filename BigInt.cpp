@@ -4,6 +4,18 @@
 #include <exception>
 #include "BigInt.h"
 
+// remove leading zeros
+static void rem_lzeros(std::vector<int>& a) {
+    while (a.size() > 1 && a.back() == 0) {
+        a.pop_back();
+    }
+}
+
+// compute a mod b
+static int mod(const int a, const int b) {
+    return a - b * int(std::floor(float(a) / b));
+}
+
 // base routine for adding two nonnegative integers
 static void add(const std::vector<int> &lhs,
                 const std::vector<int> &rhs,
@@ -37,27 +49,27 @@ static void add(const std::vector<int> &lhs,
 static void subtract(const std::vector<int> &lhs,
                      const std::vector<int> &rhs,
                      std::vector<int> &result, const int base) {
-    int i = 0;
+    size_t i = 0;
     int borrow = 0;
     while (i < lhs.size() || i < rhs.size()) {
         if (i < lhs.size() && i < rhs.size()) {
-            int partial_sum = lhs[i] - rhs[i] + borrow;
-            result[i] = partial_sum - base * std::floor(partial_sum / base);
-            borrow = int(std::floor(partial_sum / base));
+            int partial_sub = lhs[i] - rhs[i] + borrow;
+            result[i] = mod(partial_sub, base);
+            borrow = int(std::floor(float(partial_sub) / base));
         }
         else if (i < rhs.size()) {
-            int partial_sum = -rhs[i] + borrow;
-            borrow = int(std::floor(partial_sum / base));
+            int partial_sub = -rhs[i] + borrow;
+            borrow = int(std::floor(float(partial_sub) / base));
         }
         else { // i < lhs.size()
-            int partial_sum = lhs[i] + borrow;
-            // result[i] = std::abs(partial_sum % base);
-            result[i] = partial_sum - base * std::floor(partial_sum / base);
-            borrow = int(std::floor(partial_sum / base));
+            int partial_sub = lhs[i] + borrow;
+            result[i] = mod(partial_sub, base);
+            borrow = int(std::floor(float(partial_sub) / base));
         }
         ++i;
     }
     assert(borrow == 0);
+    rem_lzeros(result);
 }
 
 // base routine for mutliplying two nonegative integers
@@ -141,13 +153,13 @@ BigInt BigInt::operator+(const BigInt &rhs) const {
 BigInt BigInt::operator-(const BigInt &rhs) const {
     BigInt result = *this;
     if(!(this->is_negative() || rhs.is_negative())) {
-        // if (*this >= rhs) {
+        if (*this >= rhs) {
             subtract(this->digits, rhs.digits, result.digits, BASE);
-        // }
-        // else {
-        //     subtract(rhs.digits, this->digits, result.digits, BASE);
-        //     result.negative = true;
-        // }
+        }
+        else {
+            subtract(rhs.digits, this->digits, result.digits, BASE);
+            result.negative = true;
+        }
     }
     else {
         assert(false); // subtraction with negative BigInts not implemented
@@ -173,6 +185,59 @@ BigInt BigInt::operator+() {
 BigInt BigInt::operator-() {
     negative = negative ? false : true;
     return *this;
+}
+
+// vvvvvvvvv COMPARISON OPERATORS vvvvvvvvv
+
+bool BigInt::operator==(const BigInt &rhs) const {
+    if (this->digits.size() != rhs.digits.size()) {
+        return false;
+    }
+    else {
+        size_t i = 0;
+        while (i < this->digits.size() && i < rhs.digits.size()) {
+            if (this->digits[i] != rhs.digits[i]) {
+                return false;
+            }
+            ++i;
+        }
+        return true;
+    }
+}
+
+bool BigInt::operator!=(const BigInt &rhs) const {
+    return !(*this == rhs);
+}
+
+bool BigInt::operator<(const BigInt &rhs) const {
+    if (this->digits.size() < rhs.digits.size()) {
+        return true;
+    }
+    else if (this->digits.size() > rhs.digits.size()) {
+        return false;
+    }
+    else {
+        size_t i = 0;
+        while (i < this->digits.size() && i < rhs.digits.size()) {
+            if (this->digits[i] < rhs.digits[i]) {
+                return true;
+            }
+            ++i;
+        }
+        return false;
+    }
+}
+
+bool BigInt::operator>(const BigInt &rhs) const {
+    return !(*this == rhs || *this < rhs);
+}
+
+bool BigInt::operator<=(const BigInt &rhs) const {
+    return (*this == rhs || *this < rhs);
+}
+
+bool BigInt::operator>=(const BigInt &rhs) const {
+    return !(*this < rhs);
 }
 
 std::string BigInt::to_string() const {

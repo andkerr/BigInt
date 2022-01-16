@@ -9,11 +9,10 @@ int main() {
     BigInt a("1001");
     BigInt b("2");
 
-    if (a.is_negative() || b.is_negative()) {
-        cout << "one of a or b is negative" << endl;
-    }
-
-    a -= b;
-
-    cout << a << endl;
+    cout << "a = " << a << ", b = " << b << endl;
+    cout << "a - b: " << a - b << endl;
+    cout << "a - a: " << a - a << endl;
+    cout << "b - b: " << b - b << endl;
+    cout << "1001 - 1001: " << BigInt("1001") - BigInt("1001") << endl;
+    cout << "b - a: " << b - a << endl;
 }
