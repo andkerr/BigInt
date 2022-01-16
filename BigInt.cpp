@@ -19,9 +19,9 @@ static int mod(const int a, const int b) {
 }
 
 // base routine for adding two nonnegative integers
-static void add(const std::vector<int> &lhs,
-                const std::vector<int> &rhs,
-                std::vector<int> &result, const int base) {
+static void add(const std::vector<int>& lhs,
+                const std::vector<int>& rhs,
+                std::vector<int>& result, const int base) {
     int i = 0;
     int carry = 0;
     while (i < lhs.size() || i < rhs.size()) {
