@@ -50,10 +50,57 @@ TEST(test_subtraction_no_carry) {
 }
 
 TEST(test_subtraction_w_carry) {
-    BigInt a("1001");
-    BigInt b("2");
+    BigInt a = "1001";
+    BigInt b = "2";
     BigInt expected = "999";
     ASSERT_EQUAL(a - b, expected);
+}
+
+TEST(test_zero_nonnegative) {
+    BigInt a = "3";
+    BigInt b = a - a; // approach 0 from above
+    ASSERT_FALSE(b.is_negative());
+    b = -a + a; // approach 0 from below
+    ASSERT_FALSE(b.is_negative());
+}
+
+TEST(test_comparison_same_sign) {
+    BigInt a = "321";
+    BigInt b = "320";
+    ASSERT_TRUE(b < a);
+    ASSERT_TRUE(b <= a);
+    ASSERT_TRUE(a > b);
+    ASSERT_TRUE(a >= b);
+    ASSERT_TRUE(a != b);
+    ASSERT_FALSE(a == b);
+
+    a = "1";
+    b = "0";
+    ASSERT_TRUE(b < a);
+    ASSERT_TRUE(b <= a);
+    ASSERT_TRUE(a > b);
+    ASSERT_TRUE(a >= b);
+    ASSERT_TRUE(a != b);
+    ASSERT_FALSE(a == b);
+
+    a = "0";
+    ASSERT_FALSE(b < a);
+    ASSERT_TRUE(b <= a);
+    ASSERT_FALSE(a > b);
+    ASSERT_TRUE(a >= b);
+    ASSERT_FALSE(a != b);
+    ASSERT_TRUE(a == b);
+}
+
+TEST(test_comparison_opposite_sign) {
+    BigInt a = "1";
+    BigInt b = "-98765432";
+    ASSERT_TRUE(b < a);
+    ASSERT_TRUE(b <= a);
+    ASSERT_TRUE(a > b);
+    ASSERT_TRUE(a >= b);
+    ASSERT_TRUE(a != b);
+    ASSERT_FALSE(a == b);
 }
 
 TEST_MAIN()

@@ -237,19 +237,23 @@ BigInt BigInt::operator-() const {
 }
 
 BigInt& BigInt::operator++() {
-    assert(false);
+    return *this += BigInt("1");
 }
 
 BigInt& BigInt::operator--() {
-    assert(false);
+    return *this -= BigInt("1");
 }
 
 BigInt BigInt::operator++(int) {
-    assert(false);
+    BigInt copy = *this;
+    *this += BigInt("1");
+    return copy;
 }
 
 BigInt BigInt::operator--(int) {
-    assert(false);
+    BigInt copy = *this;
+    *this -+ BigInt("1");
+    return copy;
 }
 
 // ^^^^^^^^^^ UNARY OPERATORS ^^^^^^^^^^
@@ -257,7 +261,8 @@ BigInt BigInt::operator--(int) {
 // vvvvvvvvv COMPARISON OPERATORS vvvvvvvvv
 
 bool BigInt::operator==(const BigInt &rhs) const {
-    if (this->digits.size() != rhs.digits.size()) {
+    if (this->digits.size() != rhs.digits.size() ||
+        this->is_negative() != rhs.is_negative()) {
         return false;
     }
     else {
@@ -277,21 +282,29 @@ bool BigInt::operator!=(const BigInt &rhs) const {
 }
 
 bool BigInt::operator<(const BigInt &rhs) const {
-    if (this->digits.size() < rhs.digits.size()) {
+    if (this->is_negative() && !rhs.is_negative()) {
         return true;
     }
-    else if (this->digits.size() > rhs.digits.size()) {
+    else if (!this->is_negative() && rhs.is_negative()) {
         return false;
     }
-    else {
-        size_t i = 0;
-        while (i < this->digits.size() && i < rhs.digits.size()) {
-            if (this->digits[i] < rhs.digits[i]) {
-                return true;
-            }
-            ++i;
+    else { // *this and rhs have the same sign
+        if (this->digits.size() < rhs.digits.size()) {
+            return true;
         }
-        return false;
+        else if (this->digits.size() > rhs.digits.size()) {
+            return false;
+        }
+        else {
+            size_t i = 0;
+            while (i < this->digits.size() && i < rhs.digits.size()) {
+                if (this->digits[i] < rhs.digits[i]) {
+                    return true;
+                }
+                ++i;
+            }
+            return false;
+        }
     }
 }
 
