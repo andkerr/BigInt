@@ -14,7 +14,9 @@ class BigInt {
 
         BigInt(); // default ctor
         BigInt(const std::string &val); // ctor
+        BigInt(const char* val); // ctor from c-style string
         BigInt& operator=(const std::string &val); // assignment from string
+        BigInt& operator=(const char* val); // assignment from c-style string
 
         bool is_negative() const;
 

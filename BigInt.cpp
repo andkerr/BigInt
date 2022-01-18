@@ -121,6 +121,9 @@ BigInt::BigInt(const std::string &val) {
     }
 }
 
+BigInt::BigInt(const char* val)
+    : BigInt(std::string(val)) { };
+
 BigInt::BigInt(const std::vector<int>& digits_in, const bool negative_in)
     : digits(digits_in), negative(negative_in) { };
 
@@ -134,6 +137,10 @@ BigInt::BigInt(const std::vector<int>& digits_in, const bool negative_in)
 // Is this confusing more than it is helpful?
 BigInt& BigInt::operator=(const std::string &val) {
     return *this = BigInt(val);
+}
+
+BigInt& BigInt::operator=(const char* val) {
+    return *this = BigInt(std::string(val));
 }
 
 // ^^^^^^^^^^ CONSTRUCTORS ^^^^^^^^^^
@@ -195,6 +202,9 @@ BigInt BigInt::operator-(const BigInt &rhs) const {
             subtract(rhs.digits, this->digits, result_digs, BASE);
             result = {result_digs, true};
         }
+    }
+    else if (this->is_negative() && rhs.is_negative()) {
+        assert(false);
     }
     else {
         assert(false); // subtraction with negative BigInts not implemented
