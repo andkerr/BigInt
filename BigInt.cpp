@@ -79,6 +79,9 @@ static void subtract(const std::vector<int> &lhs,
 static void multiply(const std::vector<int> &lhs,
                      const std::vector<int> &rhs,
                      std::vector<int> &result, const int base) {
+    size_t i = 0;
+    size_t j = 0;
+    size_t k = 0;
     assert(false);
 }
 
