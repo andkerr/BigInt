@@ -56,6 +56,40 @@ TEST(test_subtraction_w_carry) {
     ASSERT_EQUAL(a - b, expected);
 }
 
+TEST(test_add_neg_neg) {
+    BigInt a = "-4";
+    BigInt b = "-7";
+    BigInt expected = "-11";
+    ASSERT_EQUAL(a + b, expected);
+    ASSERT_EQUAL(b + a, expected);
+}
+
+TEST(test_add_pos_neg) {
+    BigInt a = "4";
+    BigInt b = "-5";
+    BigInt expected = "-1";
+    ASSERT_EQUAL(a + b, expected);
+    ASSERT_EQUAL(b + a, expected);
+}
+
+TEST(test_sub_neg_neg) {
+    BigInt a = "-3";
+    BigInt b = "-11";
+    BigInt expected = "8";
+    ASSERT_EQUAL(a - b, expected);
+    expected = "-8";
+    ASSERT_EQUAL(b - a, expected);
+}
+
+TEST(test_sub_neg_pos) {
+    BigInt a = "-2";
+    BigInt b = "999";
+    BigInt expected = "-1001";
+    ASSERT_EQUAL(a - b, expected);
+    expected = "1001";
+    ASSERT_EQUAL(b - a, expected);
+}
+
 TEST(test_zero_nonnegative) {
     BigInt a = "3";
     BigInt b = a - a; // approach 0 from above

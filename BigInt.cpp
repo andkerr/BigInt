@@ -204,10 +204,17 @@ BigInt BigInt::operator-(const BigInt &rhs) const {
         }
     }
     else if (this->is_negative() && rhs.is_negative()) {
-        assert(false);
+        result = -rhs - -(*this);
     }
     else {
-        assert(false); // subtraction with negative BigInts not implemented
+        if (this->is_negative()) {
+            add(this->digits, rhs.digits, result_digs, BASE);
+            result = {result_digs, true};
+        }
+        else {
+            add(this->digits, rhs.digits, result_digs, BASE);
+            result = {result_digs, false};
+        }
     }
     return result;
 }
