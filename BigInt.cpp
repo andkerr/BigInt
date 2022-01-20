@@ -79,10 +79,17 @@ static void subtract(const std::vector<int> &lhs,
 static void multiply(const std::vector<int> &lhs,
                      const std::vector<int> &rhs,
                      std::vector<int> &result, const int base) {
-    size_t i = 0;
-    size_t j = 0;
-    size_t k = 0;
-    assert(false);
+    for (size_t i = 0; i < lhs.size(); ++i) {
+        result.push_back(0);
+    }
+    for (size_t j = 0; j < rhs.size(); ++j) {
+        int k = 0;
+        for (size_t i = 0; i < lhs.size(); ++i) {
+            int t = lhs[i] * rhs[j] + result[i + j] + k;
+            result[i + j] = mod(t, base);
+            k = int(t / base);
+        }
+    }
 }
 
 // ^^^^^^^^^^ HELPER FUNCTIONS ^^^^^^^^^^
