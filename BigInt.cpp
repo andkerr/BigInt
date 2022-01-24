@@ -22,7 +22,7 @@ static int mod(const int a, const int b) {
 static void add(const std::vector<int>& lhs,
                 const std::vector<int>& rhs,
                 std::vector<int>& result, const int base) {
-    int i = 0;
+    size_t i = 0;
     int carry = 0;
     while (i < lhs.size() || i < rhs.size()) {
         if (i < lhs.size() && i < rhs.size()) {
@@ -79,17 +79,20 @@ static void subtract(const std::vector<int> &lhs,
 static void multiply(const std::vector<int> &lhs,
                      const std::vector<int> &rhs,
                      std::vector<int> &result, const int base) {
-    for (size_t i = 0; i < lhs.size(); ++i) {
+    int k;
+    for (size_t i = 0; i < lhs.size() + rhs.size(); ++i) {
         result.push_back(0);
     }
     for (size_t j = 0; j < rhs.size(); ++j) {
-        int k = 0;
+        k = 0;
         for (size_t i = 0; i < lhs.size(); ++i) {
             int t = lhs[i] * rhs[j] + result[i + j] + k;
             result[i + j] = mod(t, base);
             k = int(t / base);
         }
+        result[lhs.size() + j] = k;
     }
+    rem_lzeros(result);
 }
 
 // ^^^^^^^^^^ HELPER FUNCTIONS ^^^^^^^^^^
@@ -132,10 +135,10 @@ BigInt::BigInt(const std::string &val) {
 }
 
 BigInt::BigInt(const char* val)
-    : BigInt(std::string(val)) { };
+    : BigInt(std::string(val)) { }
 
 BigInt::BigInt(const std::vector<int>& digits_in, const bool negative_in)
-    : digits(digits_in), negative(negative_in) { };
+    : digits(digits_in), negative(negative_in) { }
 
 // assign to a BigInt from a string representation of an integer
 //
