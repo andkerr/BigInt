@@ -138,9 +138,14 @@ TEST(test_comparison_opposite_sign) {
 }
 
 TEST(test_mul) {
-    BigInt a = "2";
-    BigInt b = "56";
-    BigInt expected = "112";
+    BigInt a = "3";
+    BigInt b = "2";
+    BigInt expected = "6";
+    ASSERT_EQUAL(a * b, expected);
+
+    a = "2";
+    b = "56";
+    expected = "112";
     ASSERT_EQUAL(a * b, expected);
 
     b = "-56";

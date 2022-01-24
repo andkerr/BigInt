@@ -47,9 +47,9 @@ static void add(const std::vector<int>& lhs,
 }
 
 // base routine for subtracting two nonnegative integers
-static void subtract(const std::vector<int> &lhs,
-                     const std::vector<int> &rhs,
-                     std::vector<int> &result, const int base) {
+static void subtract(const std::vector<int>& lhs,
+                     const std::vector<int>& rhs,
+                     std::vector<int>& result, const int base) {
     size_t i = 0;
     int borrow = 0;
     while (i < lhs.size() || i < rhs.size()) {
@@ -74,10 +74,10 @@ static void subtract(const std::vector<int> &lhs,
     rem_lzeros(result);
 }
 
-// base routine for mutliplying two nonegative integers
-static void multiply(const std::vector<int> &lhs,
-                     const std::vector<int> &rhs,
-                     std::vector<int> &result, const int base) {
+// base routine for mutliplying two nonnegative integers
+static void multiply(const std::vector<int>& lhs,
+                     const std::vector<int>& rhs,
+                     std::vector<int>& result, const int base) {
     int k;
     for (size_t i = 0; i < lhs.size() + rhs.size(); ++i) {
         result.push_back(0);
@@ -92,6 +92,40 @@ static void multiply(const std::vector<int> &lhs,
         result[lhs.size() + j] = k;
     }
     rem_lzeros(result);
+}
+
+// base routine for dividing two nonnegative integers
+static void divide(const std::vector<int>& lhs,
+                     const std::vector<int>& rhs,
+                     std::vector<int>& result, const int base) {
+    int n = rhs.size();
+    int m = lhs.size() - n;
+
+    // normalize divisor and dividend
+    std::vector<int> normalized_lhs = lhs;
+    std::vector<int> normalized_rhs = rhs;
+    int d = std::floor(float(base - 1) / rhs.back());
+    if (d == 1) {
+        normalized_lhs.push_back(0);
+    }
+    else {
+        multiply(lhs, {d}, normalized_lhs, base);
+        multiply(rhs, {d}, normalized_rhs, base);
+    }
+
+    int j = m;
+    for ( ; j >= 0; --j) {
+        int s = lhs[j + n] * base + lhs[j + n - 1];
+        int q_trial = std::floor(float(s) / rhs[n - 1]);
+        int r_trial = mod(s, lhs[n - 1]);
+        do {
+            if (q_trial == base ||
+                    q_trial * rhs[n - 2] > base * r_trial + lhs[j + n - 2]) {
+                --q_trial;
+                r_trial += rhs[n - 1];
+            }
+        } while (r_trial < base);
+    }
 }
 
 // ^^^^^^^^^^ HELPER FUNCTIONS ^^^^^^^^^^
