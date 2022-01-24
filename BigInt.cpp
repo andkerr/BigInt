@@ -233,9 +233,11 @@ BigInt BigInt::operator-(const BigInt &rhs) const {
 }
 
 BigInt BigInt::operator*(const BigInt &rhs) const {
-    BigInt result = *this;
-    multiply(this->digits, rhs.digits, result.digits, BASE);
-    result.negative = this->is_negative() == rhs.is_negative() ? false : true;
+    BigInt result;
+    std::vector<int> result_digs;
+    multiply(this->digits, rhs.digits, result_digs, BASE);
+    bool neg = this->is_negative() == rhs.is_negative() ? false : true;
+    result = {result_digs, neg};
     return result;
 }
 
