@@ -6,6 +6,7 @@ a sum of one hundred 50-digit integers.
 
 Currently Implemented:
 - addition and subtraction
+- multiplication
 
 By Andrew Kerr <kerrand@protonmail.com>
 

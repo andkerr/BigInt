@@ -142,6 +142,14 @@ TEST(test_mul) {
     BigInt b = "56";
     BigInt expected = "112";
     ASSERT_EQUAL(a * b, expected);
+
+    b = "-56";
+    expected = "-112";
+    ASSERT_EQUAL(a * b, expected);
+
+    a = "-2";
+    expected = "112";
+    ASSERT_EQUAL(a * b, expected);
 }
 
 TEST_MAIN()
