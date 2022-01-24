@@ -1,7 +1,6 @@
-#include <algorithm>
 #include <cassert>
-#include <cmath>
-#include <exception>
+#include <cmath> // std::floor
+#include <exception> // std::invalid_argument
 #include "BigInt.h"
 
 // vvvvvvvvvv HELPER FUNCTIONS vvvvvvvvvv
