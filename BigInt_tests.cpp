@@ -21,11 +21,27 @@ TEST(test_ctor) {
     ASSERT_TRUE(b.is_negative());
 }
 
+TEST(test_ctor_from_int) {
+    BigInt a(3);
+    ASSERT_EQUAL(a.to_string(), "3");
+    ASSERT_FALSE(a.is_negative());
+    BigInt b(-3);
+    ASSERT_EQUAL(b.to_string(), "-3");
+    ASSERT_TRUE(b.is_negative());
+}
+
 TEST(test_assignment_from_string) {
     BigInt a;
     a = "-12345";
     ASSERT_EQUAL(a.to_string(), "-12345");
     ASSERT_TRUE(a.is_negative());
+}
+
+TEST(test_length) {
+    BigInt a = "45678";
+    ASSERT_EQUAL(a.length(), 5);
+    a = "-45678";
+    ASSERT_EQUAL(a.length(), 5);
 }
 
 TEST(test_addition_no_carry) {

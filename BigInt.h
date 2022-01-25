@@ -15,10 +15,13 @@ class BigInt {
         BigInt(); // default ctor
         BigInt(const std::string &val); // ctor
         BigInt(const char* val); // ctor from c-style string
+        BigInt(const int val); // ctor from int (is this a good idea?)
+
         BigInt& operator=(const std::string &val); // assignment from string
         BigInt& operator=(const char* val); // assignment from c-style string
 
         bool is_negative() const;
+        int length() const;
 
         // arithmetic-assignment operators
         BigInt& operator+=(const BigInt &rhs);

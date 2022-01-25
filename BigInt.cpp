@@ -185,6 +185,16 @@ BigInt& BigInt::operator=(const std::string &val) {
     return *this = BigInt(val);
 }
 
+BigInt::BigInt(const int val) {
+    int n = val >= 0 ? val : -val;
+    while (n > 0) {
+        int dig = n % 10;
+        n = (n - dig) / 10;
+        digits.push_back(dig);
+    }
+    negative = val < 0;
+}
+
 BigInt& BigInt::operator=(const char* val) {
     return *this = BigInt(std::string(val));
 }
@@ -193,6 +203,12 @@ BigInt& BigInt::operator=(const char* val) {
 
 bool BigInt::is_negative() const {
     return negative;
+}
+
+// design question: how long should an unitilialized BigInt be? Should
+// a BigInt even have a length attribute at all?
+int BigInt::length() const {
+    return int(digits.size());
 }
 
 // vvvvvvvvvv ARITHMETIC-ASSIGNMENT OPERATORS vvvvvvvvvv
@@ -275,7 +291,12 @@ BigInt BigInt::operator*(const BigInt &rhs) const {
 }
 
 BigInt BigInt::operator/(const BigInt &rhs) const {
-    assert(false);
+    BigInt result;
+    std::vector<int> result_digs;
+    divide(this->digits, rhs.digits, result_digs, BASE);
+    bool neg = this->is_negative() == rhs.is_negative() ? false : true;
+    result = {result_digs, neg};
+    return result;
 }
 
 // ^^^^^^^^^^ ARITHMETIC OPERATORS ^^^^^^^^^^
