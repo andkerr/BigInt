@@ -94,13 +94,36 @@ static void multiply(const std::vector<int>& lhs,
     rem_lzeros(result);
 }
 
+// a simpler division algorithm for the case when the divisor is
+// of single precision (i.e. 1 < d < base)
+static void divide_single_precision(const std::vector<int>& lhs,
+                                      const std::vector<int>& rhs,
+                                      std::vector<int>& result,
+                                      const int base) {
+    assert(false);
+}
+
 // base routine for dividing two nonnegative integers
+// from Knuth, The Art of Computer Programming (Seminumerical Algorithms):
+//
+// given nonnegative integers
+//      u = (u_{m+n-1}...u_{0})_{b}
+//      and
+//      v = (v{n-1}...v_{0})_{b},
+// where the leading digit of v n.e. 0 and n > 1,
+// this recipe forms the radix-b quotient
+//      floor(u / v) = (q_{m}...q_{0})_{b}
+// and the remainder
+//      u mod v = (r_{n-1}...r_{0})_{b}.
+//
 static void divide(const std::vector<int>& lhs,
                      const std::vector<int>& rhs,
                      std::vector<int>& result, const int base) {
+    if (rhs.size() == 1) {
+        divide_single_precision(lhs, rhs, result, base);
+    }
     int n = rhs.size();
     int m = lhs.size() - n;
-
     // normalize divisor and dividend
     std::vector<int> normalized_lhs = lhs;
     std::vector<int> normalized_rhs = rhs;
@@ -112,7 +135,6 @@ static void divide(const std::vector<int>& lhs,
         multiply(lhs, {d}, normalized_lhs, base);
         multiply(rhs, {d}, normalized_rhs, base);
     }
-
     int j = m;
     for ( ; j >= 0; --j) {
         int s = lhs[j + n] * base + lhs[j + n - 1];
