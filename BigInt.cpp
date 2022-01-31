@@ -157,7 +157,7 @@ static void divide(const std::vector<int>& lhs,
 BigInt::BigInt()
     : digits({0}), negative(false) { }
 
-BigInt::BigInt(const std::string &val) {
+BigInt::BigInt(const std::string& val) {
     if (val.empty()) {
         throw std::invalid_argument(
             "BigInt cannot be initialized from an empty string."
@@ -203,7 +203,7 @@ BigInt::BigInt(const std::vector<int>& digits_in, const bool negative_in)
 // a = BigInt("12345");
 //
 // Is this confusing more than it is helpful?
-BigInt& BigInt::operator=(const std::string &val) {
+BigInt& BigInt::operator=(const std::string& val) {
     return *this = BigInt(val);
 }
 
@@ -235,19 +235,23 @@ int BigInt::length() const {
 
 // vvvvvvvvvv ARITHMETIC-ASSIGNMENT OPERATORS vvvvvvvvvv
 
-BigInt& BigInt::operator+=(const BigInt &rhs) {
+BigInt& BigInt::operator+=(const BigInt& rhs) {
     // define in terms of the overloaded addition operator
     return *this = *this + rhs;
 }
 
-BigInt& BigInt::operator-=(const BigInt &rhs) {
+BigInt& BigInt::operator-=(const BigInt& rhs) {
     // define in terms of the overloaded subtraction operator
     return *this = *this - rhs;
 }
 
-BigInt& BigInt::operator*=(const BigInt &rhs) {
+BigInt& BigInt::operator*=(const BigInt& rhs) {
     // define in terms of the overloaded subtraction operator
     return *this = *this * rhs;
+}
+
+BigInt& BigInt::operator/=(const BigInt& rhs) {
+    assert(false);
 }
 
 // ^^^^^^^^^^ ARITHMETIC-ASSIGNMENT OPERATORS ^^^^^^^^^^
