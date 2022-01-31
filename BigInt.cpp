@@ -245,6 +245,11 @@ BigInt& BigInt::operator-=(const BigInt &rhs) {
     return *this = *this - rhs;
 }
 
+BigInt& BigInt::operator*=(const BigInt &rhs) {
+    // define in terms of the overloaded subtraction operator
+    return *this = *this * rhs;
+}
+
 // ^^^^^^^^^^ ARITHMETIC-ASSIGNMENT OPERATORS ^^^^^^^^^^
 //
 // vvvvvvvvvv ARITHMETIC OPERAORS vvvvvvvvvv

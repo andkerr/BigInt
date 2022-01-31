@@ -13,25 +13,26 @@ class BigInt {
         static const int BASE = 10;
 
         BigInt(); // default ctor
-        BigInt(const std::string &val); // ctor
+        BigInt(const std::string& val); // ctor
         BigInt(const char* val); // ctor from c-style string
         BigInt(const int val); // ctor from int (is this a good idea?)
 
-        BigInt& operator=(const std::string &val); // assignment from string
+        BigInt& operator=(const std::string& val); // assignment from string
         BigInt& operator=(const char* val); // assignment from c-style string
 
         bool is_negative() const;
         int length() const;
 
         // arithmetic-assignment operators
-        BigInt& operator+=(const BigInt &rhs);
-        BigInt& operator-=(const BigInt &rhs);
+        BigInt& operator+=(const BigInt& rhs);
+        BigInt& operator-=(const BigInt& rhs);
+        BigInt& operator*=(const BigInt& rhs);
 
         // arithmetic operators
-        BigInt operator+(const BigInt &rhs) const;
-        BigInt operator-(const BigInt &rhs) const;
-        BigInt operator*(const BigInt &rhs) const;
-        BigInt operator/(const BigInt &rhs) const;
+        BigInt operator+(const BigInt& rhs) const;
+        BigInt operator-(const BigInt& rhs) const;
+        BigInt operator*(const BigInt& rhs) const;
+        BigInt operator/(const BigInt& rhs) const;
 
         // unary operators
         BigInt operator+() const;
@@ -43,16 +44,16 @@ class BigInt {
 
         // comparison operators
         // https://stackoverflow.com/questions/4421706 for reference
-        bool operator==(const BigInt &rhs) const;
-        bool operator!=(const BigInt &rhs) const;
-        bool operator< (const BigInt &rhs) const;
-        bool operator> (const BigInt &rhs) const;
-        bool operator<=(const BigInt &rhs) const;
-        bool operator>=(const BigInt &rhs) const;
+        bool operator==(const BigInt& rhs) const;
+        bool operator!=(const BigInt& rhs) const;
+        bool operator< (const BigInt& rhs) const;
+        bool operator> (const BigInt& rhs) const;
+        bool operator<=(const BigInt& rhs) const;
+        bool operator>=(const BigInt& rhs) const;
 
         std::string to_string() const;
-        friend std::ostream& operator<<(std::ostream &os,
-                                        const BigInt &val);
+        friend std::ostream& operator<<(std::ostream& os,
+                                        const BigInt& val);
 
     private:
         // BigInts are stored as an underlying vector of
