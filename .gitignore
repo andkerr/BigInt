@@ -3,6 +3,7 @@
 
 BigInt.*
 divide_single_prec.py
+subtract.py
 
 *.dSYM/
 *.in
