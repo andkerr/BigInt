@@ -95,12 +95,27 @@ static void multiply(const std::vector<int>& lhs,
 }
 
 // a simpler division algorithm for the case when the divisor is
-// of single precision (i.e. 1 < d < base)
+// of single precision (i.e. 1 < divisor < base)
 static void divide_single_precision(const std::vector<int>& lhs,
                                       const std::vector<int>& rhs,
                                       std::vector<int>& result,
                                       const int base) {
-    assert(false);
+    assert(rhs.size() == 1 && rhs[0] != 0);
+    // there must be a better way to implement this algorithm that doesn't
+    // require resizing the result vector before calculating (O(n)) and then
+    // iterating through it to compute and insert digits (O(n))
+    result.resize(lhs.size());
+    assert(result.size() == lhs.size());
+    int v = rhs[0];
+    int d_partial = 0;
+    for (size_t i = lhs.size(); i-- > 0; ) {
+        d_partial = d_partial * base + lhs[i];
+        int digit = d_partial / v;
+        result[i] = digit;
+        d_partial -= digit * v;
+    }
+    rem_lzeros(result);
+    // should this function return the remainder somehow??
 }
 
 // base routine for dividing two nonnegative integers
@@ -121,6 +136,7 @@ static void divide(const std::vector<int>& lhs,
                      std::vector<int>& result, const int base) {
     if (rhs.size() == 1) {
         divide_single_precision(lhs, rhs, result, base);
+        return;
     }
     int n = rhs.size();
     int m = lhs.size() - n;
@@ -132,8 +148,7 @@ static void divide(const std::vector<int>& lhs,
         normalized_lhs.push_back(0);
     }
     else {
-        multiply(lhs, {d}, normalized_lhs, base);
-        multiply(rhs, {d}, normalized_rhs, base);
+        multiply(lhs, {d}, normalized_lhs, base); multiply(rhs, {d}, normalized_rhs, base);
     }
     int j = m;
     for ( ; j >= 0; --j) {
