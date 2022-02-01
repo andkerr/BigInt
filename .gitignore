@@ -2,6 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=c++
 
 BigInt.*
+divide_single_prec.py
 
 *.dSYM/
 *.in
