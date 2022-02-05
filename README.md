@@ -7,6 +7,7 @@ a sum of one hundred 50-digit integers.
 Currently Implemented:
 - addition and subtraction
 - multiplication
+- integer division with a *single digit* divisor
 
 By Andrew Kerr <kerrand@protonmail.com>
 
