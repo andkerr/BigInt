@@ -22,24 +22,20 @@ static void add(const std::vector<int>& lhs,
                 const std::vector<int>& rhs,
                 std::vector<int>& result, const int base) {
     size_t i = 0;
+    size_t j = 0;
     int carry = 0;
-    while (i < lhs.size() || i < rhs.size()) {
-        if (i < lhs.size() && i < rhs.size()) {
-            int partial_sum = lhs[i] + rhs[i] + carry;
-            result.push_back(partial_sum % base);
-            carry = int(partial_sum / base);
+    while (i < lhs.size() || j < rhs.size()) {
+        int partial_sum = carry;
+        if (i < lhs.size()) {
+            partial_sum += lhs[i];
+            ++i;
         }
-        else if (i < rhs.size()) {
-            int partial_sum = rhs[i] + carry;
-            result.push_back(partial_sum % base);
-            carry = int(partial_sum / base);
+        if (j < rhs.size()) {
+            partial_sum += rhs[j];
+            ++j;
         }
-        else { // i < lhs.size()
-            int partial_sum = lhs[i] + carry;
-            result.push_back(partial_sum % base);
-            carry = int(partial_sum / base);
-        }
-        ++i;
+        result.push_back(partial_sum % base);
+        carry = int(partial_sum / base);
     }
     if (carry) {
         result.push_back(carry);
