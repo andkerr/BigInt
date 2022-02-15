@@ -47,24 +47,20 @@ static void subtract(const std::vector<int>& lhs,
                      const std::vector<int>& rhs,
                      std::vector<int>& result, const int base) {
     size_t i = 0;
+    size_t j = 0;
     int borrow = 0;
-    while (i < lhs.size() || i < rhs.size()) {
-        if (i < lhs.size() && i < rhs.size()) {
-            int partial_sub = lhs[i] - rhs[i] + borrow;
-            result.push_back(mod(partial_sub, base));
-            borrow = int(std::floor(float(partial_sub) / base));
+    while (i < lhs.size() || j < rhs.size()) {
+        int partial_sub = borrow;
+        if (i < lhs.size()) {
+            partial_sub += lhs[i];
+            ++i;
         }
-        else if (i < rhs.size()) {
-            int partial_sub = -rhs[i] + borrow;
-            result.push_back(mod(partial_sub, base));
-            borrow = int(std::floor(float(partial_sub) / base));
+        if (j < rhs.size()) {
+            partial_sub -= rhs[j];
+            ++j;
         }
-        else { // i < lhs.size()
-            int partial_sub = lhs[i] + borrow;
-            result.push_back(mod(partial_sub, base));
-            borrow = int(std::floor(float(partial_sub) / base));
-        }
-        ++i;
+        result.push_back(mod(partial_sub, base));
+        borrow = int(std::floor(float(partial_sub) / base));
     }
     assert(borrow == 0);
     rem_lzeros(result);
