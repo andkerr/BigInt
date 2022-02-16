@@ -18,9 +18,12 @@ static int mod(const int a, const int b) {
 }
 
 // base routine for adding two nonnegative integers
+// REQUIRES: This method assumes that result is an empty vector to which digits
+//           from the result will be appended as they are computed.
 static void add(const std::vector<int>& lhs,
                 const std::vector<int>& rhs,
                 std::vector<int>& result, const int base) {
+    assert(result.size() == 0);
     size_t i = 0;
     size_t j = 0;
     int carry = 0;
@@ -43,9 +46,12 @@ static void add(const std::vector<int>& lhs,
 }
 
 // base routine for subtracting two nonnegative integers
+// REQUIRES: This method assumes that result is an empty vector to which digits
+//           from the result will be appended as they are computed.
 static void subtract(const std::vector<int>& lhs,
                      const std::vector<int>& rhs,
                      std::vector<int>& result, const int base) {
+    assert(result.size() == 0);
     size_t i = 0;
     size_t j = 0;
     int borrow = 0;
@@ -67,9 +73,13 @@ static void subtract(const std::vector<int>& lhs,
 }
 
 // base routine for mutliplying two nonnegative integers
+// REQUIRES: This method assumes that result is an empty vector to which digits
+//           from the result will be appended as they are computed.
 static void multiply(const std::vector<int>& lhs,
                      const std::vector<int>& rhs,
                      std::vector<int>& result, const int base) {
+    assert(result.size() == 0);
+
     int k;
     for (size_t i = 0; i < lhs.size() + rhs.size(); ++i) {
         result.push_back(0);
@@ -124,36 +134,32 @@ static void divide_single_precision(const std::vector<int>& lhs,
 //      u mod v = (r_{n-1}...r_{0})_{b}.
 //
 static void divide(const std::vector<int>& lhs,
-                     const std::vector<int>& rhs,
-                     std::vector<int>& result, const int base) {
+                   const std::vector<int>& rhs,
+                   std::vector<int>& result, const int base) {
     if (rhs.size() == 1) {
         divide_single_precision(lhs, rhs, result, base);
         return;
     }
-    int n = rhs.size();
-    int m = lhs.size() - n;
-    // normalize divisor and dividend
-    std::vector<int> normalized_lhs = lhs;
-    std::vector<int> normalized_rhs = rhs;
-    int d = std::floor(float(base - 1) / rhs.back());
-    if (d == 1) {
-        normalized_lhs.push_back(0);
-    }
     else {
-        multiply(lhs, {d}, normalized_lhs, base); multiply(rhs, {d}, normalized_rhs, base);
-    }
-    int j = m;
-    for ( ; j >= 0; --j) {
-        int s = lhs[j + n] * base + lhs[j + n - 1];
-        int q_trial = std::floor(float(s) / rhs[n - 1]);
-        int r_trial = mod(s, lhs[n - 1]);
-        do {
-            if (q_trial == base ||
-                    q_trial * rhs[n - 2] > base * r_trial + lhs[j + n - 2]) {
-                --q_trial;
-                r_trial += rhs[n - 1];
+        assert(rhs.back() != 0);
+        int n = rhs.size();
+        int m = lhs.size() - n;
+
+        // this recipe puts the operands through various deformations. I choose
+        // to perform these on copies so that the passed-in args stay constant
+        std::vector<int> lhs_norm;
+        std::vector<int> rhs_norm;
+        int d = (base - 1) / rhs.back(); // implicit truncation
+        if (d == 1) {
+            lhs_norm.push_back(0);
+        }
+        else {
+            multiply(lhs, {d}, lhs_norm, base);
+            multiply(rhs, {d}, rhs_norm, base);
+            if (lhs_norm.size() == lhs.size()) {
+                lhs_norm.push_back(0);
             }
-        } while (r_trial < base);
+        }
     }
 }
 
