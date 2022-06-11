@@ -141,25 +141,7 @@ static void divide(const std::vector<int>& lhs,
         return;
     }
     else {
-        assert(rhs.back() != 0);
-        int n = rhs.size();
-        int m = lhs.size() - n;
-
-        // this recipe puts the operands through various deformations. I choose
-        // to perform these on copies so that the passed-in args stay constant
-        std::vector<int> lhs_norm;
-        std::vector<int> rhs_norm;
-        int d = (base - 1) / rhs.back(); // implicit truncation
-        if (d == 1) {
-            lhs_norm.push_back(0);
-        }
-        else {
-            multiply(lhs, {d}, lhs_norm, base);
-            multiply(rhs, {d}, rhs_norm, base);
-            if (lhs_norm.size() == lhs.size()) {
-                lhs_norm.push_back(0);
-            }
-        }
+      assert(false);
     }
 }
 
@@ -372,7 +354,7 @@ BigInt BigInt::operator++(int) {
 
 BigInt BigInt::operator--(int) {
     BigInt copy = *this;
-    *this -+ BigInt("1");
+    *this -= BigInt("1");
     return copy;
 }
 
